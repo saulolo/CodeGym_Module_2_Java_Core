@@ -1,8 +1,5 @@
 package org.educatiom.lesson01_OOP_EncapsulaciónYPolimorfismo;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class OOPConceptosBasicosExample {
 
     public static void main(String[] args) {
@@ -27,6 +24,7 @@ public class OOPConceptosBasicosExample {
         /*Permitir que los objetos de diferentes clases relacionadas se comporten de manera diferente usando una interfaz
          común.
          Ejemplo: Un method mover() puede tener implementaciones distintas en las clases Coche y Bicicleta.*/
+
 
     }
 }
