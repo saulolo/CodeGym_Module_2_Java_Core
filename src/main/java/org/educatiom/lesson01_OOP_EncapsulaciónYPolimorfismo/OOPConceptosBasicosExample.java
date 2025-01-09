@@ -25,6 +25,5 @@ public class OOPConceptosBasicosExample {
          común.
          Ejemplo: Un method mover() puede tener implementaciones distintas en las clases Coche y Bicicleta.*/
 
-
     }
 }
