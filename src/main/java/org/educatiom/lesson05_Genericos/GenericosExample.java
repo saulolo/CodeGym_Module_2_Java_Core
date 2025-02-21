@@ -6,7 +6,7 @@ public class GenericosExample {
 
         System.out.println("--------------------- Genéricos ---------------------------");
         //Genéricos
-        /**/
+        /*En Java, los genéricos son clases que tienen parámetros de tipo*/
 
     }
 }
