@@ -1,0 +1,275 @@
+@startuml
+
+' Relaciones de Asociación / Dependencia
+Isla "1" *-- "filas*columnas N" Ubicacion : Una Isla contiene muchas ubicaciones
+Ubicacion "1" *-- "0..*" Animal  : Una Ubicacion contiene CERO o MÁS Animales
+Ubicacion "1" *-- "1" Planta : Una Ubicacion contiene CERO o MÁS Plantas
+
+Carnivoro ..> TablaProbabilidades : usa
+Herbivoro ..> Planta : come
+
+TablaProbabilidades ..> Animal : <<references species>>
+
+
+class Isla {
+        - grid: Ubicacion[][]
+        - filas: int
+        - columnas: int
+        + Isla(filas: int, columnas: int)
+        + getUbicacion(fila: int, columna: int): Ubicacion
+        + imprimirEstadisticas(): void
+        + generarNuevasPlantas(): void
+        + getAnimalesEnUbicacion(): Map<Ubicacion, List<Animal>>
+        + getUbicacionDeAnimal(animal: Animal): Ubicacion
+        + getUbicacionesAdyacentes(ubicacion: Ubicacion): List<Ubicacion>
+}
+
+class Ubicacion {
+        - fila: int
+        - columna: int
+        - animalesEnUbicacion: CopyOnWriteArrayList<Animal>
+        - plantasEnUbicacion: CopyOnWriteArrayList<Planta>
+        + Ubicacion(fila: int, columna: int)
+        + getFila(): int
+        + getColumna(): int
+        + agregarAnimal(animal: Animal): void
+        + removerAnimal(animal: Animal): void
+        + agregarPlanta(planta: Planta): void
+        + removerPlanta(planta: Planta): void
+        + getAnimalesEnUbicacion(): CopyOnWriteArrayList<Animal>
+        + getPlantasEnUbicacion(): CopyOnWriteArrayList<Planta>
+        + contarAnimalesDeEspecie(especie: String): long
+        + puedeAgregarAnimal(especie: String, maxPorUbicacion: int): boolean
+        + toString(): String
+    }
+
+ abstract class Animal {
+        # especie: String
+        # peso: double
+        # nivelHambre: double
+        # comidaNecesaria: double
+        # maxPorUbicacion: int
+        # velocidadMax: int
+        + Animal(peso: double, maxPorUbicacion: int, velocidadMax: int, comidaNecesaria: double)
+        + vivirTurno(ubicacionActual: Ubicacion, isla: Isla): void
+        + estaMuertoDeHambre(): boolean
+        + disminuirHambre(cantidad: double): void
+        + aumentarHambre(cantidad: double): void
+        + getEspecie(): String
+        + setEspecie(especie: String): void
+        + getPeso(): double
+        + getNivelHambre(): double
+        + getComidaNecesaria(): double
+        + getMaxPorUbicacion(): int
+        + getVelocidadMax(): int
+        + {abstract} comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + {abstract} moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + {abstract} reproducirse(ubicacionActual: Ubicacion): Animal
+        + {abstract} getUnicode(): String
+        + toString(): String
+    }
+
+abstract class Carnivoro extends Animal {
+        + Carnivoro(peso: double, maxPorUbicacion: int, velocidadMax: int, comidaNecesaria: double)
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+    }
+
+abstract class Herbivoro extends Animal {
+        + Herbivoro(peso: double, maxPorUbicacion: int, velocidadMax: int, comidaNecesaria: double)
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+     }
+
+class Planta {
+        - peso: double
+        + Planta(peso: double)
+        + getPeso(): double
+        + setPeso(peso: double): void
+        + getTipo(): String
+        + toString(): String
+    }
+
+
+class Aguila extends Carnivoro {
+    + Aguila()
+    + comer(ubicacionActual: Ubicacion, isla: Isla): void
+    + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+    + reproducirse(ubicacionActual: Ubicacion): Animal
+    + getUnicode(): String
+}
+
+class Boa extends Carnivoro {
+    + Boa()
+    + comer(ubicacionActual: Ubicacion, isla: Isla): void
+    + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+    + reproducirse(ubicacionActual: Ubicacion): Animal
+    + getUnicode(): String
+}
+
+class Bufalo extends Herbivoro {
+    + Bufalo()
+    + comer(ubicacionActual: Ubicacion, isla: Isla): void
+    + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+    + reproducirse(ubicacionActual: Ubicacion): Animal
+    + getUnicode(): String
+}
+
+class Caballo extends Herbivoro {
+    + Caballo()
+    + comer(ubicacionActual: Ubicacion, isla: Isla): void
+    + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+    + reproducirse(ubicacionActual: Ubicacion): Animal
+    + getUnicode(): String
+}
+
+class Cabra extends Herbivoro {
+    + Cabra()
+    + comer(ubicacionActual: Ubicacion, isla: Isla): void
+    + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+    + reproducirse(ubicacionActual: Ubicacion): Animal
+    + getUnicode(): String
+}
+
+class Ciervo extends Herbivoro {
+    + Ciervo()
+    + comer(ubicacionActual: Ubicacion, isla: Isla): void
+    + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+    + reproducirse(ubicacionActual: Ubicacion): Animal
+    + getUnicode(): String
+}
+
+class Conejo extends Herbivoro {
+        - {static} PESO_DEFECTO: double
+        - {static} MAX_POR_UBICACION_DEFECTO: int
+        - {static} VELOCIDAD_MAX_DEFECTO: int
+        - {static} COMIDA_NECESARIA_DEFECTO: double
+        - {static} UNICODE: String
+        + Conejo()
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + reproducirse(ubicacionActual: Ubicacion): Animal
+        + getUnicode(): String
+}
+
+class Jabali extends Herbivoro {
+       - {static} PESO_DEFECTO: double
+       - {static} MAX_POR_UBICACION_DEFECTO: int
+       - {static} VELOCIDAD_MAX_DEFECTO: int
+       - {static} COMIDA_NECESARIA_DEFECTO: double
+       - {static} UNICODE: String
+       + Jabali()
+       + comer(ubicacionActual: Ubicacion, isla: Isla): void
+       + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+       + reproducirse(ubicacionActual: Ubicacion): Animal
+       + getUnicode(): String
+}
+
+class Lobo extends Carnivoro {
+        - {static} PESO_DEFECTO: double
+        - {static} MAX_POR_UBICACION_DEFECTO: int
+        - {static} VELOCIDAD_MAX_DEFECTO: int
+        - {static} COMIDA_NECESARIA_DEFECTO: double
+        - {static} UNICODE: String
+        + Lobo()
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + reproducirse(ubicacionActual: Ubicacion): Animal
+        + getUnicode(): String
+}
+
+class Oruga extends Herbivoro {
+        - {static} PESO_DEFECTO: double
+        - {static} MAX_POR_UBICACION_DEFECTO: int
+        - {static} VELOCIDAD_MAX_DEFECTO: int
+        - {static} COMIDA_NECESARIA_DEFECTO: double
+        - {static} UNICODE: String
+        + Oruga()
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + reproducirse(ubicacionActual: Ubicacion): Animal
+        + getUnicode(): String
+}
+
+class Oso extends Carnivoro {
+        - {static} PESO_DEFECTO: double
+        - {static} MAX_POR_UBICACION_DEFECTO: int
+        - {static} VELOCIDAD_MAX_DEFECTO: int
+        - {static} COMIDA_NECESARIA_DEFECTO: double
+        - {static} UNICODE: String
+        + Oso()
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + reproducirse(ubicacionActual: Ubicacion): Animal
+        + getUnicode(): String
+}
+
+class Oveja extends Herbivoro {
+        - {static} PESO_DEFECTO: double
+        - {static} MAX_POR_UBICACION_DEFECTO: int
+        - {static} VELOCIDAD_MAX_DEFECTO: int
+        - {static} COMIDA_NECESARIA_DEFECTO: double
+        - {static} UNICODE: String
+        + Oveja()
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + reproducirse(ubicacionActual: Ubicacion): Animal
+        + getUnicode(): String
+}
+
+class Pato extends Herbivoro {
+         - {static} PESO_DEFECTO: double
+         - {static} MAX_POR_UBICACION_DEFECTO: int
+         - {static} VELOCIDAD_MAX_DEFECTO: int
+         - {static} COMIDA_NECESARIA_DEFECTO: double
+         - {static} UNICODE: String
+         + Pato()
+         + comer(ubicacionActual: Ubicacion, isla: Isla): void
+         + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+         + reproducirse(ubicacionActual: Ubicacion): Animal
+         + getUnicode(): String
+}
+
+class Raton extends Carnivoro {
+        - {static} PESO_DEFECTO: double
+        - {static} MAX_POR_UBICACION_DEFECTO: int
+        - {static} VELOCIDAD_MAX_DEFECTO: int
+        - {static} COMIDA_NECESARIA_DEFECTO: double
+        - {static} UNICODE: String
+        + Raton()
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + reproducirse(ubicacionActual: Ubicacion): Animal
+        + getUnicode(): String
+}
+
+class Zorro extends Carnivoro {
+        - {static} PESO_DEFECTO: double
+        - {static} MAX_POR_UBICACION_DEFECTO: int
+        - {static} VELOCIDAD_MAX_DEFECTO: int
+        - {static} COMIDA_NECESARIA_DEFECTO: double
+        - {static} UNICODE: String
+        + Zorro()
+        + comer(ubicacionActual: Ubicacion, isla: Isla): void
+        + moverse(ubicacionActual: Ubicacion, isla: Isla): void
+        + reproducirse(ubicacionActual: Ubicacion): Animal
+        + getUnicode(): String
+}
+
+class TablaProbabilidades {
+    - {static} PROBABILIDADES_COMER: Map<String, Map<String, Integer>>
+    - {static} <<clinit>>(): void
+    + {static} getProbabilidad(depredadorEspecie: String, presaEspecie: String): int
+}
+
+class mainSimulador {
+    - {static} isla: Isla
+    - {static} NUM_TURNOS: int
+    - {static} FILAS: int
+    - {static} COLUMNAS: int
+    + {static} main(args: String[]): void
+    - {static} poblarIslaInicialmente(): void
+    - {static} realizarTurno(): void
+}
+
+@enduml
